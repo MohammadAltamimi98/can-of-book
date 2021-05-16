@@ -7,12 +7,11 @@ import {
   Switch,
   Route
 } from "react-router-dom";
-// import BestBooks from './BestBooks';
 import LoginButton from './LoginButton';
 import Profile from './Profile';
-// import { withAuth0 } from '@auth0/auth0-react';
-// import axios from 'axios';
-// import MyFavoriteBooks from './BestBooks';
+import MyFavoriteBooks from './BestBooks';
+import useAuth0  from "@auth0/auth0-react";
+
 
 class App extends React.Component {;
 
@@ -26,7 +25,8 @@ class App extends React.Component {;
             <Switch>
               <Route exact path="/">
                 {/* TODO: if the user is logged in, render the `MyFavoriteBooks` component, if they are not, render the `Login` component */}
-               <LoginButton/>
+                {this.props.useAuth0.isAuthenticated ? <MyFavoriteBooks/> : <LoginButton/>}
+               
                 
               </Route>
               {/* TODO: add a route with a path of '/profile' that renders a `Profile` component */}
