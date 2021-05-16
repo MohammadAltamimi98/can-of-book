@@ -12,6 +12,9 @@ import Profile from './Profile';
 import MyFavoriteBooks from './BestBooks';
 import { withAuth0 } from '@auth0/auth0-react';
 
+
+
+
 class App extends React.Component {;
 
   render() {
@@ -30,7 +33,7 @@ class App extends React.Component {;
               {/* TODO: add a route with a path of '/profile' that renders a `Profile` component */}
 
               <Route path="/profile">
-                <Profile/>
+              {this.props.auth0.isAuthenticated &&  <Profile/>}
                 </Route>
             </Switch>
             <Footer />
