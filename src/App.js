@@ -10,8 +10,7 @@ import {
 import LoginButton from './LoginButton';
 import Profile from './Profile';
 import MyFavoriteBooks from './BestBooks';
-import useAuth0  from "@auth0/auth0-react";
-
+import { withAuth0 } from '@auth0/auth0-react';
 
 class App extends React.Component {;
 
@@ -25,11 +24,11 @@ class App extends React.Component {;
             <Switch>
               <Route exact path="/">
                 {/* TODO: if the user is logged in, render the `MyFavoriteBooks` component, if they are not, render the `Login` component */}
-                {this.props.useAuth0.isAuthenticated ? <MyFavoriteBooks/> : <LoginButton/>}
+                {this.props.auth0.isAuthenticated ?  <MyFavoriteBooks/> :   <LoginButton/>}
                
-                
-              </Route>
+                </Route>
               {/* TODO: add a route with a path of '/profile' that renders a `Profile` component */}
+
               <Route path="/profile">
                 <Profile/>
                 </Route>
@@ -42,4 +41,4 @@ class App extends React.Component {;
   }
 }
 
-export default App;
+export default withAuth0(App);
