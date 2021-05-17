@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import { withAuth0 } from '@auth0/auth0-react';
+import BestBooks from './BestBooks';
+
 
 
 export class Profile extends Component {
@@ -12,8 +14,10 @@ export class Profile extends Component {
                     <>
                         <p> Hello  {user.name} ! </p>
                         <p> Your Email address : {user.email}. </p>
-                       
-                       <img src={user.picture} alt=""/>
+
+                        <img src={user.picture} alt="" />
+
+                        <BestBooks />
                     </>
                 }
             </div>
