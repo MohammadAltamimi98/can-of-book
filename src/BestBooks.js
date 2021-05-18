@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import axios from 'axios';
 import Card from 'react-bootstrap/Card'
+import Button from 'react-bootstrap/Button'
 import { withAuth0 } from '@auth0/auth0-react';
 
 
@@ -22,7 +23,7 @@ class BestBooks extends React.Component {
   getBooksData = async () => {
     const { user } = this.props.auth0;
     try {
-      const booksUrl = `http://localhost:3003/book?email=${user.email}`;
+      const booksUrl = `http://localhost:8080/book?email=${user.email}`;
       console.log(user.email);
       const bookRequest = await axios.get(booksUrl);
       console.log(bookRequest);
@@ -49,12 +50,14 @@ class BestBooks extends React.Component {
           <div key={index}>
             
             <Card bg={'info'} style={{ width: '18rem' }}>
-            <Card.Body key={index}>
+            <Card.Body>
               <Card.Title>book title: {book.name}</Card.Title>
               <Card.Text>book description: {book.description}</Card.Text>
               <Card.Text>book status: {book.status}</Card.Text>
             </Card.Body>
+            <Button onClick={(i) => this.props.deleteBook(i)}>Delete</Button>
             </Card>
+      
             <br/>
           </div>
 
