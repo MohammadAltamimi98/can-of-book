@@ -21,14 +21,13 @@ class BestBooks extends React.Component {
 
   getBooksData = async () => {
     const { user } = this.props.auth0;
-
     try {
-      const booksUrl = `{REACT_APP_PORT}/book?email=${user.email}`;
-      // console.log(user.email);
+      const booksUrl = `http://localhost:3003/book?email=${user.email}`;
+      console.log(user.email);
       const bookRequest = await axios.get(booksUrl);
       console.log(bookRequest);
       this.setState({
-        booksData: bookRequest.data[0].books,
+        booksData: bookRequest.data,
       })
     }
     catch (err) {
@@ -47,13 +46,17 @@ class BestBooks extends React.Component {
         </p>
         {this.state.booksData.map((book, index) =>
 
-          <>
+          <div key={index}>
+            
+            <Card bg={'info'} style={{ width: '18rem' }}>
             <Card.Body key={index}>
               <Card.Title>book title: {book.name}</Card.Title>
               <Card.Text>book description: {book.description}</Card.Text>
               <Card.Text>book status: {book.status}</Card.Text>
             </Card.Body>
-          </>
+            </Card>
+            <br/>
+          </div>
 
 
         )}
