@@ -23,10 +23,12 @@ class BestBooks extends React.Component {
     const { user } = this.props.auth0;
 
     try {
-      const booksUrl = `{process.env.REACT_APP_PORT}/Books?email=${user.email}`
-      const bookRequest = await axios.get(booksUrl)
+      const booksUrl = `{REACT_APP_PORT}/book?email=${user.email}`;
+      // console.log(user.email);
+      const bookRequest = await axios.get(booksUrl);
+      console.log(bookRequest);
       this.setState({
-        booksData: bookRequest.data[0].books
+        booksData: bookRequest.data[0].books,
       })
     }
     catch (err) {
@@ -43,7 +45,7 @@ class BestBooks extends React.Component {
         <p>
           This is a collection of my favorite books
         </p>
-        {this.state.bookData.map((book, index) =>
+        {this.state.booksData.map((book, index) =>
 
           <>
             <Card.Body key={index}>

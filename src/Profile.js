@@ -14,7 +14,6 @@ export class Profile extends Component {
                     <>
                         <p> Hello  {user.name} ! </p>
                         <p> Your Email address : {user.email}. </p>
-
                         <img src={user.picture} alt="" />
 
                         <BestBooks />
