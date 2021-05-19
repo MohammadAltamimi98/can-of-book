@@ -25,7 +25,7 @@ constructor (props){
     bookName:'',
     bookDescription:'',
     bookStatus:'',
-    books:''
+    books:[]
   }}
   updateBookName = (e)=>{this.setState({bookName : e.target.value});
 console.log(this.state.bookName);}
@@ -36,11 +36,14 @@ addBook = async (e) => {
   e.preventDefault();
 
   // TODO: send the request to the backend 
+  const { isAuthenticated, user } = this.props.auth0;
   const bodyData = {
     name: this.state.bookName,
     description: this.state.bookDescription,
-    status: this.state.bookStatus
+    status: this.state.bookStatus,
+    email : user.email
   }
+  console.log(bodyData);
   const newBook = await axios.post(`http://localhost:8080/book`,bodyData);
 
   // TODO: get the new data and update it in the state
@@ -51,31 +54,7 @@ addBook = async (e) => {
 
 ///////////////////
 
-deleteBook = async (index) => {
-  // console.log(index);
-  const newArrayOfBooks = this.state.books.filter((book, i) => {
-    return i !== index;
-  });
-
-  console.log(newArrayOfBooks);
-  this.setState({
-    books: newArrayOfBooks
-  });
-
-  const query = {
-    name: this.state.name
-  }
-
-  await axios.delete(`http://localhost:8080/book/${index}`, { params: query })
-
-}
-
-
-
-
-/////////////////////
   render() {
-    console.log('app', this.props);
     return(
       <>
         <Router>

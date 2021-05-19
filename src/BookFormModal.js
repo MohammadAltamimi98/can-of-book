@@ -7,7 +7,7 @@ class BookFormModal extends Component {
     render() {
         return (
             <div>
-                <form onSubmit = {(e)=>this.props.addBook(e)}>
+                <form onSubmit = {(e)=>this.props.addBook(e)} >
 
                 <label>Book Name</label>
                 <input type = 'text' onChange ={(e)=>this.props.updateBookName(e) }/>
