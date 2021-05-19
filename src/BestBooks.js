@@ -30,12 +30,12 @@ class BestBooks extends React.Component {
     this.setState({
       booksData: newArrayOfBooks
     });
-    const { isAuthenticated, user } = this.props.auth0;
+    const {  user } = this.props.auth0;
     const query = {
       email:user.email
     }
     console.log('app', query);
-    await axios.delete(`http://localhost:8080/book/${index}`, { params: query })
+    await axios.delete(`http://localhost:3003/book/${index}`, { params: query })
   }
   /////////////////////
 
@@ -46,7 +46,7 @@ class BestBooks extends React.Component {
   getBooksData = async () => {
     const { user } = this.props.auth0;
     try {
-      const booksUrl = `http://localhost:8080/book?email=${user.email}`;
+      const booksUrl = `http://localhost:3003/book?email=${user.email}`;
       console.log(user.email);
       const bookRequest = await axios.get(booksUrl);
       console.log(bookRequest.data);

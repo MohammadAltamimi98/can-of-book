@@ -36,7 +36,7 @@ addBook = async (e) => {
   e.preventDefault();
 
   // TODO: send the request to the backend 
-  const { isAuthenticated, user } = this.props.auth0;
+  const {  user } = this.props.auth0;
   const bodyData = {
     name: this.state.bookName,
     description: this.state.bookDescription,
@@ -44,7 +44,7 @@ addBook = async (e) => {
     email : user.email
   }
   console.log(bodyData);
-  const newBook = await axios.post(`http://localhost:8080/book`,bodyData);
+  const newBook = await axios.post(`http://localhost:3003/book`,bodyData);
 
   // TODO: get the new data and update it in the state
   this.setState({
