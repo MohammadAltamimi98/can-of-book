@@ -29,10 +29,7 @@ class App extends React.Component {
       books: []
     }
   }
-  updateBookName = (e) => {
-    this.setState({ bookName: e.target.value });
-    console.log(this.state.bookName);
-  }
+  updateBookName = (e) => this.setState({ bookName: e.target.value });
   updateBookDescription = (e) => this.setState({ bookDescription: e.target.value });
   updateBookStatus = (e) => this.setState({ bookStatus: e.target.value });
   ///////////////////
@@ -56,26 +53,26 @@ class App extends React.Component {
   }
 
   ///////////////////
-  updateBook = async (e) => {
+  // updateBook = async (e) => {
 
-    e.preventDefault();
-    const { user } = this.props.auth0;
-    const reqBody = {
-      bookName: this.state.bookName,
-      bookDescription: this.state.bookDescription,
-      bookStatus: this.state.bookStatus,
-      email: user.email
-    }
-    console.log(reqBody);
-    const updatedBooks = await axios.put(`http://localhost:3003/user/${this.state.index}`, reqBody);
-    this.setState({
-      books: updatedBooks.data
-    });
+  //   e.preventDefault();
+  //   const { user } = this.props.auth0;
+  //   const reqBody = {
+  //     bookName: this.state.bookName,
+  //     bookDescription: this.state.bookDescription,
+  //     bookStatus: this.state.bookStatus,
+  //     email: user.email
+  //   }
+  //   console.log(reqBody);
+  //   const updatedBooks = await axios.put(`http://localhost:3003/user/${this.state.index}`, reqBody);
+  //   this.setState({
+  //     books: updatedBooks.data
+  //   });
 
-  }
+  // }
 
 
-  //////////////////
+  // //////////////////
   render() {
     return (
       <>

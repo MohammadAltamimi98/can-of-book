@@ -16,7 +16,8 @@ class BestBooks extends React.Component {
       name: '',
       description: '',
       status: '',
-      show:false
+      show:false,
+      index:0,
     
     }
   }
@@ -40,21 +41,35 @@ class BestBooks extends React.Component {
   /////////////////////
   
   updateBook = async (index) => {
-    console.log(index);
-    const newArrayOfBooks = this.state.booksData.filter((book, i) => {
-      return i === index;
-    });
-    // console.log(newArrayOfBooks);
-    this.setState({
-      booksData: newArrayOfBooks
-    });
+   
+
+    // console.log(index);
+    // const newArrayOfBooks = this.state.booksData.filter((book, i) => {
+    //   return i === index;
+    // });
     const {  user } = this.props.auth0;
-    const query = {
+    // console.log(newArrayOfBooks);
+    const bodyDataForUpdate={
+      name:this.state.name,
+      description:this.state.description,
+      status:this.state.description,
       email:user.email
     }
-    console.log('app', query);
-    await axios.delete(`http://localhost:3003/book/${index}`, { params: query })
+    alert(bodyDataForUpdate);
+
+    const updatedBooks= await axios.put(`http://localhost:3003/book/${index}`, bodyDataForUpdate);
+    console.log(updatedBooks);
+
+  
   }
+///////////////////////
+showUpdateForm=(idx) =>{
+this.setState({
+  index:idx,
+  show:true,
+})
+}
+
 //////////////////////
   componentDidMount() {
     this.getBooksData();
@@ -94,7 +109,7 @@ class BestBooks extends React.Component {
               <Card.Text>book status: {book.status}</Card.Text>
             </Card.Body>
             <Button onClick={() => this.deleteBook(index)}>Delete</Button>
-            <Button onClick={() => this.updateBook(index)}>Update Book</Button>
+            <Button onClick={() => this.showUpdateForm(index)}>Update Book</Button>
 
             </Card>
       
