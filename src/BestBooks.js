@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import axios from 'axios';
 import Card from 'react-bootstrap/Card'
+import Button from 'react-bootstrap/Button'
 import { withAuth0 } from '@auth0/auth0-react';
 
 
@@ -11,9 +12,32 @@ class BestBooks extends React.Component {
     super(props);
     this.state = {
       booksData: [],
+          books:[],
+      name: '',
+      description: '',
+      status: '',
+      show:false
+    
     }
   }
 
+  deleteBook = async (index) => {
+    console.log(index);
+    const newArrayOfBooks = this.state.booksData.filter((book, i) => {
+      return i !== index;
+    });
+    console.log(newArrayOfBooks);
+    this.setState({
+      booksData: newArrayOfBooks
+    });
+    const { isAuthenticated, user } = this.props.auth0;
+    const query = {
+      email:user.email
+    }
+    console.log('app', query);
+    await axios.delete(`http://localhost:8080/book/${index}`, { params: query })
+  }
+  /////////////////////
 
   componentDidMount() {
     this.getBooksData();
@@ -22,10 +46,10 @@ class BestBooks extends React.Component {
   getBooksData = async () => {
     const { user } = this.props.auth0;
     try {
-      const booksUrl = `http://localhost:3003/book?email=${user.email}`;
+      const booksUrl = `http://localhost:8080/book?email=${user.email}`;
       console.log(user.email);
       const bookRequest = await axios.get(booksUrl);
-      console.log(bookRequest);
+      console.log(bookRequest.data);
       this.setState({
         booksData: bookRequest.data,
       })
@@ -33,8 +57,6 @@ class BestBooks extends React.Component {
     catch (err) {
       console.log(err)
     }
-
-
   }
 
   render() {
@@ -49,12 +71,14 @@ class BestBooks extends React.Component {
           <div key={index}>
             
             <Card bg={'info'} style={{ width: '18rem' }}>
-            <Card.Body key={index}>
+            <Card.Body>
               <Card.Title>book title: {book.name}</Card.Title>
               <Card.Text>book description: {book.description}</Card.Text>
               <Card.Text>book status: {book.status}</Card.Text>
             </Card.Body>
+            <Button onClick={() => this.deleteBook(index)}>Delete</Button>
             </Card>
+      
             <br/>
           </div>
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+// import dotenv from 'dotenv';
 import App from './App';
 import { Auth0Provider } from "@auth0/auth0-react";
 
@@ -9,9 +10,9 @@ import { Auth0Provider } from "@auth0/auth0-react";
 
 ReactDOM.render(
   <Auth0Provider
-    domain={process.env.REACT_APP_DOMAIN_KEY}
+  domain={process.env.REACT_APP_DOMAIN_KEY}
     clientId={process.env.REACT_APP_CLIENT_KEY}
-    redirectUri={window.location.origin}
+  redirectUri={window.location.origin}
   >
 
     <App />
