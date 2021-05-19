@@ -14,7 +14,7 @@ import BookFormModal from './BookFormModal';
 import { withAuth0 } from '@auth0/auth0-react';
 import Login from './Login';
 import axios from 'axios';
-
+import BookUpdateForm from './BookUpdateForm';
 
 
 
@@ -56,7 +56,26 @@ class App extends React.Component {
   }
 
   ///////////////////
+  updateBook = async (e) => {
 
+    e.preventDefault();
+    const { user } = this.props.auth0;
+    const reqBody = {
+      bookName: this.state.bookName,
+      bookDescription: this.state.bookDescription,
+      bookStatus: this.state.bookStatus,
+      email: user.email
+    }
+    console.log(reqBody);
+    const updatedBooks = await axios.put(`http://localhost:3003/user/${this.state.index}`, reqBody);
+    this.setState({
+      books: updatedBooks.data
+    });
+
+  }
+
+
+  //////////////////
   render() {
     return (
       <>
@@ -72,6 +91,10 @@ class App extends React.Component {
                   updateBookDescription={this.updateBookDescription}
                   updateBookStatus={this.updateBookStatus}
                   addBook={this.addBook} /> : ''}
+                  {this.props.auth0.isAuthenticated &&  <BookUpdateForm  updateBookName={this.updateBookName}
+                  updateBookDescription={this.updateBookDescription}
+                  updateBookStatus={this.updateBookStatus}
+                  updateBook={this.updateBook} />  }
               </Route>
               {/* TODO: add a route with a path of '/profile' that renders a `Profile` component */}
 

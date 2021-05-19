@@ -38,7 +38,24 @@ class BestBooks extends React.Component {
     await axios.delete(`http://localhost:3003/book/${index}`, { params: query })
   }
   /////////////////////
-
+  
+  updateBook = async (index) => {
+    console.log(index);
+    const newArrayOfBooks = this.state.booksData.filter((book, i) => {
+      return i === index;
+    });
+    // console.log(newArrayOfBooks);
+    this.setState({
+      booksData: newArrayOfBooks
+    });
+    const {  user } = this.props.auth0;
+    const query = {
+      email:user.email
+    }
+    console.log('app', query);
+    await axios.delete(`http://localhost:3003/book/${index}`, { params: query })
+  }
+//////////////////////
   componentDidMount() {
     this.getBooksData();
   }
@@ -77,6 +94,8 @@ class BestBooks extends React.Component {
               <Card.Text>book status: {book.status}</Card.Text>
             </Card.Body>
             <Button onClick={() => this.deleteBook(index)}>Delete</Button>
+            <Button onClick={() => this.updateBook(index)}>Update Book</Button>
+
             </Card>
       
             <br/>
