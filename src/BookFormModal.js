@@ -28,4 +28,4 @@ class BookFormModal extends Component {
     }
 }
 
-export default BookFormModal
+export default BookFormModal;
