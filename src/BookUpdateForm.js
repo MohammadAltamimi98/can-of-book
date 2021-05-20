@@ -1,22 +1,22 @@
 import React, { Component } from 'react'
 
 
-class BookFormModal extends Component {
+class BookUpdateForm extends Component {
 
 
     render() {
         return (
             <div>
-                <form onSubmit={(e) => this.props.updateBook(e)} >
+                <form onSubmit={(e) => this.props.updateBooks(e)} >
 
                     <label>Book Name</label>
-                    <input type='text' onChange={(e) => this.props.updateBookName(e)} />
+                    <input type='text' onChange={(e) => this.props.updateBookName(e)}  value={this.props.name}/>
                     <br />
                     <label>Book Description</label>
-                    <input type='text' onChange={(e) => this.props.updateBookDescription(e)} />
+                    <input type='text' onChange={(e) => this.props.updateBookDescription(e)} value={this.props.description} />
                     <br />
                     <label>Book Status</label>
-                    <input type='text' onChange={(e) => this.props.updateBookStatus(e)} />
+                    <input type='text' onChange={(e) => this.props.updateBookStatus(e)}  value={this.props.status}/>
                     <br />
                     <button type="submit">
                         Update
@@ -28,4 +28,6 @@ class BookFormModal extends Component {
     }
 }
 
-export default BookFormModal
+export default BookUpdateForm;
+
+

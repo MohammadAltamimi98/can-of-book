@@ -2,78 +2,42 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import axios from 'axios';
-import Card from 'react-bootstrap/Card'
-import Button from 'react-bootstrap/Button'
-import { withAuth0 } from '@auth0/auth0-react';
+import MyFavoriteBooks from './MyFavoriteBooks'
+import BookUpdateForm from './BookUpdateForm';
+import BookFormModal from './BookFormModal';
+import { withAuth0 } from "@auth0/auth0-react";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Button from 'react-bootstrap/Button';
+
 
 
 class BestBooks extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      booksData: [],
-          books:[],
+      books: [],
       name: '',
       description: '',
       status: '',
-      show:false,
-      index:0,
-    
+      showTheUpdateForm: false,
+      index: 0,
+      showAddForm:false,
     }
   }
 
-  deleteBook = async (index) => {
-    console.log(index);
-    const newArrayOfBooks = this.state.booksData.filter((book, i) => {
-      return i !== index;
-    });
-    console.log(newArrayOfBooks);
-    this.setState({
-      booksData: newArrayOfBooks
-    });
-    const {  user } = this.props.auth0;
-    const query = {
-      email:user.email
-    }
-    console.log('app', query);
-    await axios.delete(`http://localhost:3003/book/${index}`, { params: query })
-  }
-  /////////////////////
-  
-  updateBook = async (index) => {
-   
 
-    // console.log(index);
-    // const newArrayOfBooks = this.state.booksData.filter((book, i) => {
-    //   return i === index;
-    // });
-    const {  user } = this.props.auth0;
-    // console.log(newArrayOfBooks);
-    const bodyDataForUpdate={
-      name:this.state.name,
-      description:this.state.description,
-      status:this.state.description,
-      email:user.email
-    }
-    alert(bodyDataForUpdate);
 
-    const updatedBooks= await axios.put(`http://localhost:3003/book/${index}`, bodyDataForUpdate);
-    console.log(updatedBooks);
+  // update functions
+  updateBookName = (e) => this.setState({ name: e.target.value });
+  updateBookDescription = (e) => this.setState({ description: e.target.value });
+  updateBookStatus = (e) => this.setState({ status: e.target.value });
 
-  
-  }
-///////////////////////
-showUpdateForm=(idx) =>{
-this.setState({
-  index:idx,
-  show:true,
-})
-}
+  // getting the books from the db  function
 
-//////////////////////
   componentDidMount() {
     this.getBooksData();
   }
+
 
   getBooksData = async () => {
     const { user } = this.props.auth0;
@@ -83,13 +47,112 @@ this.setState({
       const bookRequest = await axios.get(booksUrl);
       console.log(bookRequest.data);
       this.setState({
-        booksData: bookRequest.data,
+        books: bookRequest.data,
       })
     }
     catch (err) {
       console.log(err)
     }
   }
+
+
+
+  // delete a book function 
+
+  deleteBook = async (index) => {
+    console.log(index);
+
+    const newArrayOfBooks = this.state.books.filter((book, i) => {
+      return i !== index;
+    });
+    console.log(newArrayOfBooks);
+    this.setState({
+      books: newArrayOfBooks
+    });
+    const { user } = this.props.auth0;
+    const query = {
+      email: user.email
+    }
+    console.log('app', query);
+    await axios.delete(`http://localhost:3003/book/${index}`, { params: query })
+
+  }
+
+
+  // add a book
+  addBook = async (e) => {
+
+    // TODO: send the request to the backend 
+    const { user } = this.props.auth0;
+    const bodyData = {
+      name: this.state.name,
+      description: this.state.description,
+      status: this.state.status,
+      email: user.email
+    }
+    console.log(bodyData);
+    const newBook = await axios.post(`http://localhost:3003/book`, bodyData);
+
+    // TODO: get the new data and update it in the state
+    this.setState({
+      books: newBook.data
+    })
+  }
+
+
+  // update a book 
+  //  show the update form upon clicking :
+
+  showUpdateForm = (idx) => {
+    const ArrayOfBooks = this.state.books.filter((value, index) => {
+      return index === idx
+    });
+
+    this.setState({
+      index: idx,
+      name: ArrayOfBooks[0].name,
+      description: ArrayOfBooks[0].description,
+      status: ArrayOfBooks[0].status,
+      showTheUpdateForm: true,
+    });
+  }
+  // function to update the data in the backend when clicking:
+  updateBooks = async (e) => {
+
+    e.preventDefault();
+    const { user } = this.props.auth0
+    const reqBody = {
+      name: this.state.name,
+      description: this.state.description,
+      status: this.state.status,
+      email: user.email
+    }
+
+    const updatedBooks = await axios.put(`http://localhost:3003/book/${this.state.index}`, reqBody);
+    this.setState({
+      books: updatedBooks.data,
+    });
+  }
+
+
+  showAddFrom = ()=> this.setState({showAddForm : true});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   render() {
     return (
@@ -98,26 +161,52 @@ this.setState({
         <p>
           This is a collection of my favorite books
         </p>
-        {this.state.booksData.map((book, index) =>
-
-          <div key={index}>
-            
-            <Card bg={'info'} style={{ width: '18rem' }}>
-            <Card.Body>
-              <Card.Title>book title: {book.name}</Card.Title>
-              <Card.Text>book description: {book.description}</Card.Text>
-              <Card.Text>book status: {book.status}</Card.Text>
-            </Card.Body>
-            <Button onClick={() => this.deleteBook(index)}>Delete</Button>
-            <Button onClick={() => this.showUpdateForm(index)}>Update Book</Button>
-
-            </Card>
-      
-            <br/>
-          </div>
 
 
-        )}
+        <Button onClick={this.showAddFrom} variant="outline-primary">Add a Book</Button><br/><br/>
+            {this.state.showAddForm &&
+              <>
+                 <BookFormModal
+         updateBookName={this.updateBookName}
+         updateBookDescription={this.updateBookDescription}
+         updateBookStatus={this.updateBookStatus}
+         addBook={this.addBook}
+        />
+                
+                <br/><br/>
+              </>
+              }
+
+
+
+
+       
+
+
+        {this.state.showTheUpdateForm &&
+
+        <BookUpdateForm
+          name={this.state.name}
+          description={this.state.description}
+          status={this.state.status}
+          updateBookName={this.updateBookName}
+          updateBookDescription={this.updateBookDescription}
+          updateBookStatus={this.updateBookStatus}
+          updateBooks={this.updateBooks}
+        /> }
+
+
+        
+
+
+        <MyFavoriteBooks
+          deleteBook={this.deleteBook}
+          showUpdateForm={this.showUpdateForm}
+          books={this.state.books}
+          updateBooks={this.updateBooks}
+        />
+
+
       </Jumbotron>
     )
   }
